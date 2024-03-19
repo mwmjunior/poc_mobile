@@ -1,0 +1,47 @@
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
+import * as LocalAuthentication from 'expo-local-authentication'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useEffect, useState } from 'react';
+
+
+
+
+export default function App() {
+  const [biometricExist, setBiometricExist] = useState(false)
+
+
+  async function CheckExistAuthenticate(){
+    // Validar se o aparelho tem o acesso  a biometria 
+    const compatible = await LocalAuthentication.hasHardwareAsync()
+
+    setBiometricExist(compatible)
+
+  }
+
+  useEffect(() => {
+
+    CheckExistAuthenticate()
+  }, [])
+  
+
+
+  return (
+    <View style={styles.container}>
+      <Text>
+        {biometricExist ? 'Seu dispositivo e compativel com a biometria'
+                         : ' Seu dispositivo nao suporta FaceId/ Biometria'}
+
+      </Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
